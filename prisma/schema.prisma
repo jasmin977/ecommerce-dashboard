@@ -1,0 +1,135 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id       String    @id @default(uuid())
+  name     String
+  products Product[] @relation("CategoryToProduct")
+  imageId  String    @unique
+  image    Image     @relation(fields: [imageId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([name])
+  @@map("categories")
+}
+
+model Brand {
+  id        String    @id @default(uuid())
+  name      String
+  products  Product[] @relation("BrandToProduct")
+  imageId   String    @unique
+  image     Image     @relation(fields: [imageId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([name])
+  @@map("brands")
+}
+
+model Product {
+  id         String    @id @default(uuid())
+  categoryId String? // Foreign Key to Category
+  category   Category? @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  brandId    String? // Foreign Key to Brand
+  brand      Brand?    @relation("BrandToProduct", fields: [brandId], references: [id])
+  name       String
+
+  price        Decimal
+  discount     Decimal?
+  stock        Decimal
+  isPublished  Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  expirationAt DateTime?
+  images       Image[]
+  OrderItem    OrderItem[]
+  rating       Float?
+
+  @@index([name])
+  @@index([categoryId])
+  @@index([brandId])
+  @@map("products")
+}
+
+model Image {
+  id        String    @id @default(uuid())
+  url       String
+  productId String?
+  product   Product?  @relation(fields: [productId], references: [id])
+  brand     Brand?
+  category  Category?
+  customer  Customer?
+
+  @@map("images")
+}
+
+model Customer {
+  id          String       @id @default(uuid())
+  phoneNumber String       @unique
+  fisrtname   String
+  lastname    String
+  password    String
+  email       String?
+  address     String
+  imageId     String       @unique
+  image       Image        @relation(fields: [imageId], references: [id])
+  orders      Order[]      @relation("CustomerToOrders")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  status      CustomStatus
+
+  @@index([fisrtname])
+  @@index([address])
+  @@map("customers")
+}
+
+model Order {
+  id         Int         @id @default(autoincrement())
+  customerId String
+  customer   Customer    @relation("CustomerToOrders", fields: [customerId], references: [id])
+  isPaid     Boolean     @default(false)
+  phone      String      @default("")
+  address    String      @default("")
+  orderItems OrderItem[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  status     OrderStatus
+
+  @@index([customerId])
+  @@index([isPaid])
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   Int
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@index([productId])
+  @@map("orderItems")
+}
+
+enum OrderStatus {
+  PENDING
+  SHIPPED
+  CANCELLED
+}
+
+enum CustomStatus {
+  ACTIVE
+  PASSIVE
+}

@@ -2,26 +2,205 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  height: 100%;
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: ;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 215 20.2% 65.1%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: ;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+
+    --ring: 217.2 32.6% 17.5%;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@layer components {
+  /* main */
+  .main-container {
+    @apply flex flex-col items-center flex-1 min-h-screen px-6 pb-10 bg-[#F6F9FC] pt-28 max-md:pb-32 sm:px-10;
+  }
+
+  /* Head Text */
+  .head-text {
+    @apply text-heading2-bold text-light-1;
+  }
+
+  /* Activity */
+  .activity-card {
+    @apply flex items-center gap-2 py-4 rounded-md bg-dark-2 px-7;
+  }
+
+  /* No Result */
+  .no-result {
+    @apply text-center !text-base-regular text-light-3;
+  }
+
+  /* Community Card */
+  .community-card {
+    @apply w-full px-4 py-5 rounded-lg bg-dark-3 sm:w-96;
+  }
+
+  .community-card_btn {
+    @apply rounded-lg bg-primary px-5 py-1.5 text-small-regular !text-light-1 !important;
+  }
+
+  /* thread card  */
+  .thread-card_bar {
+    @apply relative mt-2 w-0.5 grow rounded-full bg-neutral-800;
+  }
+
+  /* User card */
+  .user-card {
+    @apply flex flex-col justify-between gap-4 max-xs:rounded-xl max-xs:bg-dark-3 max-xs:p-4 xs:flex-row xs:items-center;
+  }
+
+  .user-card_avatar {
+    @apply flex items-start justify-start flex-1 gap-3 xs:items-center;
+  }
+
+  .user-card_btn {
+    @apply h-auto min-w-[74px] rounded-lg bg-primary text-[12px] text-light-1 !important;
+  }
+
+  .searchbar {
+    @apply flex gap-1 px-4 py-2 rounded-lg bg-dark-2;
+  }
+
+  .searchbar_input {
+    @apply border-none bg-dark-2 text-base-regular text-light-4 outline-none !important;
+  }
+
+  .topbar {
+    @apply fixed top-0 z-40 flex items-center justify-around w-full px-6 py-3 dark:border-gray-800 dark:bg-dark-2 bg-light-2;
+  }
+
+  .bottombar {
+    @apply fixed bottom-0 z-10 w-full p-4 rounded-t-3xl bg-glassmorphism backdrop-blur-lg xs:px-7 md:hidden;
+  }
+
+  .bottombar_container {
+    @apply flex items-center justify-between gap-3 xs:gap-5;
+  }
+
+  .bottombar_link {
+    @apply relative flex flex-col items-center gap-2 rounded-lg p-2 sm:flex-1 sm:px-2 sm:py-2.5;
+  }
+
+  .leftsidebar {
+    @apply sticky top-0 left-0 z-40 flex flex-col justify-between h-screen pt-2 pb-5 overflow-auto transition-all ease-linear border-r bg-light-2 dark:bg-dark-2 w-fit border-r-light-2 dark:border-r-dark-2 max-md:hidden;
+  }
+
+  .leftsidebar_link {
+    @apply relative flex justify-start w-full gap-4 p-4 rounded-lg;
+  }
+
+  .pagination {
+    @apply flex items-center justify-center w-full gap-5 mt-10;
+  }
+
+  .rightsidebar {
+    @apply sticky top-0 right-0 z-20 flex flex-col justify-between h-screen gap-12 px-10 pb-6 overflow-auto border-l w-fit border-l-dark-4 bg-dark-2 pt-28 max-xl:hidden;
+  }
+  .hover_card {
+    @apply transition-all ease-linear border-2 border-gray-100 rounded-lg dark:border-gray-800 dark:bg-dark-2 bg-light-2 hover:shadow-xl;
+  }
+  .table-cell {
+    border: 1px solid #ccc; /* Add your desired border properties */
+    padding: 0.5rem; /* Add your desired padding value */
+    text-align: left; /* Align text to the left */
+  }
+}
+
+@layer utilities {
+  .css-invert {
+    @apply invert-[50%] brightness-200;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    border-radius: 2px;
+  }
+
+  /* .custom-scrollbar::-webkit-scrollbar-track {
+    background: #0c3d2a;
+  } */
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #0080ff;
+    border-radius: 50px;
+  }
+
+  /*   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #042557;
+  }   */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
